@@ -126,8 +126,8 @@ docker stack deploy --compose-file this-file-name stack-name
 
 ```bash
 [database]
-db_user = maxscale-user-name
-db_password = maxscale-user-password
+user = maxscale-user-name
+password = maxscale-user-password
 cluster_addresses = service-name-of-your-galera-cluster
 cluster_num_nodes = number-of-nodes-in-your galera-cluster
 ```
