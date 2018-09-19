@@ -23,8 +23,8 @@ SECRETS_FILE="/run/secrets/${SECRETS}"
 if [ -f ${SECRETS_FILE} ]; then
     info "Found a secret file: ${SECRETS_FILE}"
 
-    MAXSCALE_USER=$(crudini --get ${SECRETS_FILE} database db_user)
-    MAXSCALE_PASSWORD=$(crudini --get ${SECRETS_FILE} database db_password)
+    MAXSCALE_USER=$(crudini --get ${SECRETS_FILE} database user)
+    MAXSCALE_PASSWORD=$(crudini --get ${SECRETS_FILE} database password)
     CLUSTER_SERVICES=$(crudini --list --get ${SECRETS_FILE} database cluster_addresses)
     NUM_CLUSTER_NODES=$(crudini --get ${SECRETS_FILE} database cluster_num_nodes)
 fi

@@ -122,7 +122,7 @@ docker stack deploy --compose-file this-file-name stack-name
 * (require) **MAXSCALE_PASSWORD**: a user password that connects with galera clusters.
 * (require) **CLUSTER_SERVICES**: list of nodes (e.g., container names, service names in docker deploy or docker swarm). It should be separated by comma without space (e.g., service1,service2; not service1, service2).
 * **NUM_CLUSTER_NODES**: the number of cluster nodes. If not set, this tries to found nodes until 150 sec.
-* **SECRETS_FILE**: If you want to use **Docker Secrets**, you should specify secret name here. The secret file should be a INI format like below:
+* **SECRETS**: If you want to use **Docker Secrets**, you should specify secret name here. The secret file should be a INI format like below:
 
 ```bash
 [database]
