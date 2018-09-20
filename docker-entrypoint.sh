@@ -60,7 +60,7 @@ for COUNT in {30..0}; do
     sleep 5
 done
 
-if [ -n "${NUM_CLUSTER_NODES}"] && [ $COUNT -eq 0 ]; then
+if [ -n "${NUM_CLUSTER_NODES}" ] && [ $COUNT -eq 0 ]; then
     error "Failed to find galera cluster nodes. Check the status of a galera cluster."
     exit 1
 fi
