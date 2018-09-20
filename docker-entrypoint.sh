@@ -47,7 +47,7 @@ for COUNT in {30..0}; do
             DATABASE_ADDRESSES=( "${DATABASE_ADDRESSES[@]}" "${DATABASE_ADDRESS[@]}")
         fi
     done
-    if [ -n "${NUM_CLUSTER_NODES}"]; then
+    if [ -n "${NUM_CLUSTER_NODES}" ]; then
         info "Found ${#DATABASE_ADDRESSES[@]} from the total ${NUM_CLUSTER_NODES} nodes: ${DATABASE_ADDRESSES[@]}"
         if [ ${#DATABASE_ADDRESSES[@]} -ge ${NUM_CLUSTER_NODES} ]; then
             break
