@@ -1,19 +1,21 @@
 # woohyeokchoi/mariadb-maxscale
 
-This image automatically setup [MariaDB](https://mariadb.com/products/technology/maxscale) Maxscale for connection routing with Galera Clusters.
+This image automatically setup MariaDB [Maxscale](https://mariadb.com/products/technology/maxscale) for connection routing with Galera Clusters.
 
 ## How to use
 
 ```bash
-docker run -d -p 3306:3306 -p 8989:8989 -p 6603:6603\
-            -n
+docker run -d -p 3306:3306\
+            --network same-network-interface-with-galera-clusters
             -e MAXSCALE_USER=your-maxscale-name
             -e MAXSCALE_PASSWORD=your-maxscale-password
             -e CLUSTER_SERVICES=service1,service2,service3
             -e NUM_CLUSTER_NODES=3
 ```
 
-If successfuly setup, you can connect MariaDB client with 3306 port. Also, you can see nodes in a cluster with [Maxadmin](https://maxscale.readthedocs.io/en/stable/Documentation/Reference/MaxAdmin) like below:
+If successfully setup, you can connect MariaDB client with the port, 3306.
+
+Also, you can see nodes in a cluster with [Maxadmin](https://maxscale.readthedocs.io/en/stable/Documentation/Reference/MaxAdmin) like below:
 
 ```bash
 docker exec -it your-maxscale-container-name maxadmin list servers
@@ -21,10 +23,12 @@ docker exec -it your-maxscale-container-name maxadmin list servers
 
 ## Prerequistes
 
-* You should setup your own galera clusters (I strongly recommend this [image](https://github.com/woohyeok-choi/mariadb-galera-cluster)).
-* The number of nodes should be equal to or greater than 3.
-* Each node should be run as a docker service, and share same network interface with this image.
-* Each node should open a port, 3306
+* You should setup your own Galera clusters as Docker services
+  * I strongly recommend to use this [image](https://github.com/woohyeok-choi/mariadb-galera-cluster)
+* All nodes and the Maxscale should share same network interface (refers to [this](https://docs.docker.com/network/))
+* The number of nodes should be equal to or greater than 3 (refers to [this](https://mariadb.com/kb/en/library/getting-started-with-mariadb-galera-cluster/#minimal-cluster-size))
+* Each node can be connected through the port, 3306
+  * This is the default setting for Maria DB Docker image.
 * Each node in clusters should grant Maxscale's access like below:
 
 ```sql
@@ -40,7 +44,7 @@ GRANT DROP ON *.* TO '${MAXSCALE_USER}'@'%' ;
 FLUSH PRIVILEGES ;
 ```
 
-I strongly recommend to use this image in a docker compose like below:
+I strongly recommend to use this image in a Docker compose like below:
 
 ```yaml
 version: '3.5'
@@ -113,14 +117,14 @@ networks:
 And, run command below:
 
 ```bash
-docker stack deploy --compose-file this-file-name stack-name
+docker stack deploy --compose-file this-compose-file-name stack-name
 ```
 
 ## Environment variables
 
 * (require) **MAXSCALE_USER**: a user name that connects with galera clusters.
 * (require) **MAXSCALE_PASSWORD**: a user password that connects with galera clusters.
-* (require) **CLUSTER_SERVICES**: list of nodes (e.g., container names, service names in docker deploy or docker swarm). It should be separated by comma without space (e.g., service1,service2; not service1, service2).
+* (require) **CLUSTER_SERVICES**: list of nodes (i.e., service names in docker deploy or docker swarm). It should be separated by comma without space (e.g., service1,service2; not service1, service2).
 * **NUM_CLUSTER_NODES**: the number of cluster nodes. If not set, this tries to found nodes until 150 sec.
 * **SECRETS**: If you want to use **Docker Secrets**, you should specify secret name here. The secret file should be a INI format like below:
 
