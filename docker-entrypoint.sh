@@ -18,15 +18,19 @@ CONN_TIMEOUT=3600
 PERSIST_POOLMAX=10
 PERSIST_MAXTIME=600
 
-SECRETS_FILE="/run/secrets/${SECRETS}"
+SECRET_FILE="/run/secrets/${SECRET_NAME}"
 
-if [ -f ${SECRETS_FILE} ]; then
-    info "Found a secret file: ${SECRETS_FILE}"
+if [ -z ${INI_SECTION} ]; then
+    INI_SECTION=''
+fi
 
-    MAXSCALE_USER=$(crudini --get ${SECRETS_FILE} database user)
-    MAXSCALE_PASSWORD=$(crudini --get ${SECRETS_FILE} database password)
-    CLUSTER_SERVICES=$(crudini --list --get ${SECRETS_FILE} database cluster_addresses)
-    NUM_CLUSTER_NODES=$(crudini --get ${SECRETS_FILE} database cluster_num_nodes)
+if [ -f ${SECRET_FILE} ]; then
+    info "Found a secret file: ${SECRET_FILE}"
+
+    MAXSCALE_USER=$(crudini --get ${SECRET_FILE} "${INI_SECTION}" maxscale_user)
+    MAXSCALE_PASSWORD=$(crudini --get ${SECRET_FILE} "${INI_SECTION}" maxscale_password)
+    CLUSTER_SERVICES=$(crudini --list --get ${SECRET_FILE} "${INI_SECTION}" cluster_addresses)
+    NUM_CLUSTER_NODES=$(crudini --get ${SECRET_FILE} "${INI_SECTION}" cluster_num_nodes)
 fi
 
 
